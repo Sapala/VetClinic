@@ -1,0 +1,47 @@
+﻿@model IEnumerable<VetClinic.Data.Data.Clinic.Patient>
+
+@{
+    ViewData["Title"] = "Moje zwierzaki";
+    Layout = "~/Views/Shared/_ClientPanelLayout.cshtml";
+}
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th class="text-left" width="150">
+                    Imię
+                </th>
+                <th class="text-left" width="150">
+                    @Html.DisplayNameFor(model => model.PatientType)
+                </th>
+                <th class="text-left" width="250">
+                    Przydomek hodowlany
+                </th>
+                <th class="text-left" width="200">
+                    @Html.DisplayNameFor(model => model.BirthDate)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr onclick="location.href = '@(Url.Action("Details", "Patient", new { id = item.PatientID }, null))'">
+                    <td class="text-left">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td class="text-left">
+                        @Html.DisplayFor(modelItem => item.PatientType.Name)
+                    </td>
+                    <td class="text-left">
+                        @Html.DisplayFor(modelItem => item.KennelName)
+                    </td>
+                    <td class="text-left">
+                        @Html.DisplayFor(modelItem => item.BirthDate)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

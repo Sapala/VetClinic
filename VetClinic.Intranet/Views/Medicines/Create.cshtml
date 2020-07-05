@@ -1,0 +1,69 @@
+﻿@model VetClinic.Data.Data.Clinic.Medicine
+
+@{
+    ViewData["Title"] = "Nowy lek";
+}
+<form asp-action="Create" enctype="multipart/form-data">
+    <div class="form-row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @*<div class="row inputGroupMargin col-12">*@
+        <div class="form-group col-md-6">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="label1">Typ Leku</span>
+                </div>
+                <select type="select" asp-for="MedicineTypeID" class="form-control" aria-describedby="label1" asp-items="ViewBag.MedicineTypeID"></select>
+                <span asp-validation-for="MedicineTypeID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="label1">Nazwa Leku</span>
+                </div>
+                <input type="text" asp-for="Name" class="form-control" aria-describedby="label1" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    @*</div>*@
+    <div class="form-row">
+        @*<div class="row inputGroupMargin col-12">*@
+        <div class="form-group col-12">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Opis</span>
+                </div>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    @*</div>*@
+    <div class="form-row">
+        @*<div class="row inputGroupMargin col-4">*@
+        <div class="form-group col-3">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Cena</span>
+                </div>
+                <input type="text" asp-for="Price" class="form-control text-right" aria-describedby="label1" />
+                <div class="input-group-append">
+                    <span asp-validation-for="Price" class="input-group-text">zł</span>
+                </div>
+                @*<span asp-validation-for="Price" class="text-danger"></span>*@
+            </div>
+        </div>
+    </div>
+    @*</div>*@
+
+
+    <div>
+        <input type="submit" value="Utwórz" class="btn btn-success float-right buttMargin" />
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

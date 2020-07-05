@@ -1,0 +1,132 @@
+﻿@model VetClinic.Data.Data.Clinic.User
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Dodaj</h4>
+<hr />
+
+<form asp-action="Create" enctype="multipart/form-data">
+    <div class="form-row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group col-md-4">
+            <label>Imię</label>
+            <input asp-for="FirstName" class="form-control"/>
+            <span asp-validation-for="FirstName" class="text-danger" ></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Nazwisko</label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-1">
+            <label>Nr domu</label>
+            <input asp-for="HouseNumber" class="form-control text-right" />
+            <span asp-validation-for="HouseNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-1">
+            <label>Nr lokalu</label>
+            <input asp-for="ApartmentNumber" class="form-control text-right" />
+            <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Ulica</label>
+            <input asp-for="Street" class="form-control" required/>
+            <span asp-validation-for="Street" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Kod poczowy</label>
+            <input asp-for="PostalCode" class="form-control text-right" />
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Miejscowość</label>
+            <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-8">
+            <label>E-Mail</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Rodzaj użytkownika</label>
+            <select asp-for="UserTypeID" class="form-control" asp-items="ViewBag.UserTypeID"></select>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Login</label>
+            <input asp-for="Login" class="form-control" />
+            <span asp-validation-for="Login" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Hasło</label>
+            <div class="row">
+                <div class="col-md-6">
+                    <input readonly="readonly" id="passwordInput" asp-for="Password" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <button  onclick="generatePassword()" class="btn btn-primary w-100">Generuj hasło</button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Telefon</label>
+            <input asp-for="Phone" class="form-control text-right" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Zdjęcie</label>
+            <input type="file" class="form-control-file" id="file" name="file" />
+            <span asp-validation-for="Photo" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-4">
+            <label>Numer karty klienta</label>
+            <input asp-for="CardNumber" class="form-control text-right" />
+            <span asp-validation-for="CardNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Opis</label>
+        <textarea asp-for="Description" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Zapisz" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a class="btn btn-outline-primary" role="button" asp-action="Index">
+        <span class="fas fa-arrow-circle-left"></span> Wróć do listy
+    </a>
+</div>
+
+<script>
+    function generatePassword() {
+        event.preventDefault();
+        var buf = new Uint8Array(6);
+        window.crypto.getRandomValues(buf);
+        document.getElementById("passwordInput").value = btoa(String.fromCharCode.apply(null, buf));
+    }
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

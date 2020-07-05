@@ -1,0 +1,188 @@
+﻿@model IEnumerable<VetClinic.Data.Data.Clinic.Visit>
+@{
+    ViewData["Title"] = String.Format("Wizyty pacjenta: {0},    Właściciel: {2} {3}", ViewData["PatientName"], @ViewData["PatientID"], ViewData["PatientUserFirstName"], ViewData["PatientUserLastName"]);
+    //ViewData["Title"] = String.Format("Wizyty pacjenta");
+
+}
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        .selected {
+            background-color: #f3715b;
+            cursor: pointer;
+        }
+
+        .sortable tr {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<link href="~/css/Zakladki.css" rel="stylesheet" />
+
+<div class="form-row">
+    <div class="form-group col-4" style="min-width: 280px; max-width: 280px">
+        <div class="col" style="padding-left:0px; padding-right:0px; padding-bottom:5px;">
+            <a class="btn btn-outline-secondary btn-sm" role="button" style="min-width: 132px;" href='@Url.Action("Edit", "Patients", new { id = ViewData["PatientID"] }, null)'>
+                <span class="fas fa-info-circle"></span> Pacjent
+            </a>
+            <a class="btn btn-outline-secondary btn-sm" role="button" style="min-width: 132px;" href='@Url.Action("Edit", "Customers", new { id = ViewData["PatientUserID"] }, null)'>
+                <span class="fas fa-info-circle"></span> Właściciel
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover" id="myTable">
+                <thead class="komorka">
+                    <tr>
+                        <th>
+                            Nr.
+                        </th>
+                        <th>Data</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="clickable-row @(item.IsActive ? "item-active" : "item-not-active" )" data-VisitId="@item.VisitID" style="cursor:pointer">
+                            <td>
+                                @Convert.ToString(item.VisitID)
+                            </td>
+                            <td>
+                                @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.DateOfVisit))
+                            </td>
+                            <td>
+                                <a href="#" data-VisitId="@item.VisitID" onclick="VisitDetailsClick(@item.VisitID)" class="visitdetails-id btn btn-outline-dark btn-sm" role="button">
+                                    <span class="fas fa-eye"></span>
+                                    Podgląd
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="maincont" class="form-group col col-sm-9" style="min-width:400px"></div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" id="exampleModal" tabindex="-1" role="dialog"
+     aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" style="margin-top:20%;margin-left:25%">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edytuj Opis</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+            $('#myTable').on('click', '.clickable-row', function test(e) {
+                $(this).addClass('selected').siblings().removeClass('selected');
+                e.preventDefault();
+                var vId = $(this).attr('data-visitId');
+                $.ajax({
+                    type: 'get',
+                    url: '@Url.Action("VisitDetails", "Patients")',
+                    data: {
+                        id: vId
+                    },
+                    success: function (pageContent) {
+                        $('#maincont').html(pageContent);
+                    }
+                });
+            });
+    </script>
+
+    <script>
+    function VisitDetailsClick(VisitId) {
+            var pId = VisitId;
+                $.ajax({
+                    type: 'get',
+                    url: '@Url.Action("VisitDetails", "Patients")',
+                    data: {
+                        id: pId
+                    },
+                    success: function (pageContent) {
+                        $('#maincont').html(pageContent);
+                    }
+                });
+        }
+    function DeleteVisitTretment(treatmentID, visitID) {
+             {
+                $.ajax({
+                    type: 'get',
+                    url: '@Url.Action("DeleteVisitTretment", "Patients")',
+                    data: {
+                        TreatmentID: treatmentID,
+                        VisitID: visitID
+                    },
+                    success: function (visitID) {
+                        VisitDetailsClick(visitID)
+                    }
+                });
+            }
+        }
+    function DeleteVisitMedicine(medicineID, visitID) {
+             {
+                $.ajax({
+                    type: 'get',
+                    url: '@Url.Action("DeleteVisitMedicine", "Patients")',
+                    data: {
+                        MedicineID: medicineID,
+                        VisitID: visitID
+                    },
+                    success: function (visitID) {
+                        VisitDetailsClick(visitID);
+                    }
+                });
+            }
+    }
+
+    function addMedicine(visitID, patientID) {
+             {
+                $.ajax({
+                    type: 'get',
+                    url: '@Url.Action("CreateVisitMedicine", "Patients")',
+                    data: {
+                        VisitID: visitID,
+                        PatientID: patientID,
+                        
+                       
+                    },
+                    success: function (visitID) {
+                        VisitDetailsClick(visitID);
+                    }
+                });
+            }
+    }
+
+  if (window.location.hash) {
+            var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+
+                $.ajax({
+                    type: 'get',
+                    url: '@Url.Action("VisitDetails", "Patients")',
+                    data: {
+                    id: hash
+                          },
+                    success: function (pageContent)
+                    {
+                        $('#maincont').html(pageContent);
+                    }
+                });
+            }
+
+
+    </script>
+}

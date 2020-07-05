@@ -1,0 +1,58 @@
+@model VetClinic.Data.Helpers.VisitDetails
+@{
+        Layout = null;
+}
+
+
+    <form asp-action="AddVisit">
+        <input type="hidden" asp-for="@Model.Patient.PatientID"/>
+        <div class="form-row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="row inputGroupMargin col-12">*@
+            <div class="form-group col-md-6">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="label1">Lekarz</span>
+                    </div>
+                    <select type="select" asp-for="Visit.VetID" class="form-control" aria-describedby="label1" asp-items="ViewBag.VetID"></select>
+                    <span asp-validation-for="Visit.VetID" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="label1">Data wizyty</span>
+                    </div>
+                    <input type="date" asp-for="Visit.DateOfVisit" class="form-control" aria-describedby="label1" />
+                    <span asp-validation-for="Visit.DateOfVisit" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        @*</div>*@
+
+        <div class="form-row">
+            @*<div class="row inputGroupMargin col-12">*@
+            <div class="form-group col-12">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Opis</span>
+                    </div>
+                    <textarea asp-for="Visit.Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Visit.Description" class="text-danger"></span>
+                </div>
+            </div>
+            @*</div>*@
+        </div>
+
+        <div>
+            <input type="submit" value="Utwórz wizytę" class="btn btn-success float-right buttMargin" asp-fragment="@Model.Visit.VisitID"/>
+        </div>
+    </form>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

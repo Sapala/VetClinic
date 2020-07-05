@@ -1,0 +1,186 @@
+﻿@model VetClinic.Data.Data.CMS.RecentNews
+
+@{
+    ViewData["Title"] = String.Format("Edycja aktualności {0}", Model.Title);
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<div class="container">
+    <div class="row">
+        <form asp-action="Edit" class="col" enctype="multipart/form-data" id="saveForm">
+            <div class="row">
+                <input type="hidden" asp-for="RecentNewsID" />
+                <input type="hidden" asp-for="IsActive" />
+                <input type="hidden" asp-for="Image" />
+                <input type="hidden" asp-for="AddedDate" />
+                <input type="hidden" asp-for="AddedUserID" />
+                <input type="hidden" asp-for="UpdatedUserID" />
+                <input type="hidden" asp-for="UpdatedDate" />
+                <div class="form-group col NewsCardImgCol">
+                    <div class="input-group colrow">
+                        <div class="input-group-append">
+                            <div class="card-image">
+                                @{
+                                    if (Model.Image != null)
+                                    {
+                                        var base64 = Convert.ToBase64String(Model.Image);
+                                        var imgSrc = String.Format("data:Image/jpeg;base64,{0}", base64);
+                                        <img class="NewsImg" src="@imgSrc" />
+                                    }
+                                    else
+                                    {
+                                        <img class="NewsImg" src="~/images/empty_image.png" />
+                                    }
+                                }
+                                <br />
+                                <br />
+                                <input type="file" class="form-control-file btn-outline-info" id="files" asp-for="Image" accept="image/*" />
+                                <span asp-validation-for="Image" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="showimage" style="padding-top:10px">
+                    </div>
+                </div>
+
+                <div class="col-xl" style="align-self: center;">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="label1">Nagłówek</span>
+                            </div>
+                            <input type="text" asp-for="LinkTitle" class="form-control" aria-describedby="label1">
+                            <span asp-validation-for="LinkTitle" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="label2">Tytuł</span>
+                            </div>
+                            <input type="text" asp-for="Title" class="form-control" aria-describedby="label2">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span asp-for="Position" class="input-group-text">@Html.DisplayNameFor(model => model.Position)</span>
+                            </div>
+                            <input asp-for="Position" class="form-control text-right col-2">
+                            <span asp-validation-for="Position" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <textarea class="form-control" asp-for="Text" rows="8"></textarea>
+                            <span asp-validation-for="Text" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @await Component.InvokeAsync("DetailsComponent", new
+            {
+               AddedDate = @Model.AddedDate,
+               AddedUserID = @Model.AddedUserID,
+               UpdatedDate = @Model.UpdatedDate,
+               UpdatedUserID = @Model.UpdatedUserID
+            })
+        </form>
+    </div>
+    <div class="row">
+        <div class="col">
+            @if (Model.IsActive)
+            {
+                <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-outline-danger buttMargin" data-toggle="modal" data-target="#myModal">
+                    Usuń
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h4 class="modal-title">Uwaga!</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                Czy chcesz usunąć aktualność?
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <form asp-action="Delete" asp-route-id="@Model.RecentNewsID">
+                                    <input type="hidden" asp-for="RecentNewsID" />
+                                    <input type="submit" value="Tak" class="btn btn-outline-danger buttMargin" />
+                                    <button type="button" class="btn btn-outline-secondary buttMargin" data-dismiss="modal">Nie</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<form asp-action="Delete" asp-route-id="@Model.RecentNewsID" onsubmit="alert('Na pewno chcesz usunąć aktualność?')">
+                <input type="hidden" asp-for="RecentNewsID" />
+                <input type="submit" value="Usuń" class="btn btn-outline-danger buttMargin" />
+            </form>*@
+            }
+            else
+            {
+                <form asp-action="Restore" asp-route-id="@Model.RecentNewsID">
+                    <input type="hidden" asp-for="RecentNewsID" />
+                    <input type="submit" value="Przywróć" class="btn btn-outline-success buttMargin" />
+                </form>
+            }
+        </div>
+        <div class="col">
+            <input form="saveForm" type="submit" value="Zapisz" class="btn btn-success float-right buttMargin" />
+        </div>
+    </div>
+
+</div>
+
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        height: "400",
+        menubar: false,
+        language: 'pl'
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    $(document).ready(function () {
+        $("#files").change(function () {
+            var previewimages = $("#showimage");
+            previewimages.html("");
+            $($(this)[0].files).each(function () {
+                var file = $(this);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = $("<img />");
+                    img.attr("style", "height:150px;width: 150px;");
+                    img.attr("src", e.target.result);
+                    previewimages.append(img);
+                }
+                reader.readAsDataURL(file[0]);
+            });
+        });
+    });
+</script>

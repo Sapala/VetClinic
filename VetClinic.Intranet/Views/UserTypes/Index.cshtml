@@ -1,0 +1,31 @@
+﻿@model IEnumerable<VetClinic.Data.Data.Clinic.UserType>
+
+@{
+    ViewBag.Title = "Grupy uprawnień";
+}
+
+<div class="row mb-3">
+    <div class="col-12">
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Permissions">Uprawniena</a>
+        <a class="btn btn-outline-success float-right" asp-action="Create"><i class="fas fa-plus-circle"></i> Dodaj</a>
+    </div>
+</div>
+
+<div class="justify-content-end" >
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-sm-6">
+                <div class="card mb-4 border-danger">
+                    <div class="card-body">
+                        <h3 class="card-title"> @Html.DisplayFor(modelItem => item.Name)</h3>
+
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                        <a asp-action="Edit" asp-route-id="@item.UserTypeID" class="btn float-right btn-outline-primary"><i class="fas fa-edit"></i> Zarządzaj</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

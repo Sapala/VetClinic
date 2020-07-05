@@ -1,0 +1,59 @@
+﻿@model VetClinic.Data.Data.Clinic.Patient
+
+@{
+    ViewData["Title"] = "Szczegóły";
+    Layout = "~/Views/Shared/_ClientPanelLayout.cshtml";
+}
+
+    <div class="container">
+        <div class="row">
+            <form class="col">
+                <div class="form-row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="PatientID" />
+                    <input type="hidden" asp-for="PatientTypeID" />
+
+                    <div class="form-group col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="label1">Imię</span>
+                            </div>
+                            <input disabled asp-for="Name" class="form-control" aria-describedby="label1" />
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="label1">Przydomek hodowlany</span>
+                            </div>
+                            <input disabled asp-for="KennelName" class="form-control" aria-describedby="label1" style="background-color:white"/>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="label1">Rodzaj zwierzaka</span>
+                            </div>
+                            <input disabled asp-for="PatientType.Name" class="form-control" aria-describedby="label1" style="background-color:white"/>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="label1">Data urodzenia</span>
+                            </div>
+                            <input disabled type="date" asp-for="BirthDate" style="background-color:white" class="form-control" aria-describedby="label1" style="background-color:white"/>
+                        </div>
+                    </div>
+                    <div class="form-group col-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Opis</span>
+                            </div>
+                            <textarea disabled asp-for="Description" class="form-control" rows="4" style="background-color:white"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>

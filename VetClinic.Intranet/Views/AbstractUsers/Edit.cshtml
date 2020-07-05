@@ -1,0 +1,325 @@
+﻿@model VetClinic.Data.Data.Clinic.User
+
+@{
+    ViewData["Title"] = String.Format("{0} {1} {2} (Login: {3})", ViewBag.Title, Model.FirstName, Model.LastName, Model.Login);
+}
+
+<div class="container">
+    <div class="row">
+        <form asp-action="Edit" name="myForm" enctype="multipart/form-data" id="saveForm">
+            <input type="hidden" name="length" value="8">
+            <div class="row">
+                <input type="hidden" asp-for="UserID" />
+                <input type="hidden" asp-for="IsActive" />
+                <input type="hidden" asp-for="Image" />
+                <input type="hidden" asp-for="AddedDate" />
+                <input type="hidden" asp-for="UpdatedDate" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group col-lg-4">
+                    <div class="input-group col-12 row mb-3">
+                        <div class="input-group-append">
+                            <div class="card-image" id="showimage">
+                                @{
+                                    if (Model.Image != null)
+                                    {
+                                        var base64 = Convert.ToBase64String(Model.Image);
+                                        var imgSrc = String.Format("data:Image/jpeg;base64,{0}", base64);
+                                        <img style="width: 100%" src="@imgSrc" />
+                                    }
+                                    else
+                                    {
+                                        <img style="width: 100%" src="~/images/empty_image.png" />
+                                    }
+                                }
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6" style="padding-left: 0px;">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div id="showimage"></div>
+                            </div>
+                            <span class="btn btn-primary btn-file">
+                                Wybierz zdjęcie <input type="file" class="form-control-file" id="files" asp-for="Image" accept="image/*" />
+                            </span>
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-8">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Login</span>
+                                </div>
+                                <input type="text" asp-for="Login" class="form-control" aria-describedby="label1" readonly="readonly" />
+                                <span asp-validation-for="Login" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Hasło</span>
+                                </div>
+                                <input type="hidden" id="passwordInput" asp-for="Password" class="form-control" aria-describedby="label1" />
+                                <input id="passPop" type="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Nowe hasło zostało wygenerowane, nie zapomnij zapisać zmian!" onclick="generatePassword()" value="Generuj hasło" class="generate-pass btn-primary form-control valid" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Imię</span>
+                                </div>
+                                <input type="text" asp-for="FirstName" class="form-control" aria-describedby="label1" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Nazwisko</span>
+                                </div>
+                                <input type="text" asp-for="LastName" class="form-control" aria-describedby="label1" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Numer telefonu</span>
+                                </div>
+                                <input type="text" asp-for="Phone" class="form-control text-right" aria-describedby="label1" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">E-mail</span>
+                                </div>
+                                <input type="text" asp-for="Email" class="form-control" aria-describedby="label1" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Ulica</span>
+                                </div>
+                                <input type="text" asp-for="Street" class="form-control" aria-describedby="label1" />
+                                <span asp-validation-for="Street" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Adres</span>
+                                </div>
+                                <input type="text" asp-for="HouseNumber" class="form-control text-right" aria-describedby="label1" placeholder="Numer domu" />
+                                <span asp-validation-for="HouseNumber" class="text-danger"></span>
+                                <input type="text" asp-for="ApartmentNumber" class="form-control text-right" aria-describedby="label1" placeholder="Numer lokalu" />
+                                <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Kod Pocztowy</span>
+                                </div>
+                                <input type="text" asp-for="PostalCode" class="form-control text-right" aria-describedby="label1" />
+                                <span asp-validation-for="PostalCode" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Miasto</span>
+                                </div>
+                                <input type="text" asp-for="City" class="form-control" aria-describedby="label1" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Numer karty</span>
+                                </div>
+                                <input type="text" asp-for="CardNumber" class="form-control text-right" aria-describedby="label1" />
+                                <span asp-validation-for="CardNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="label1">Opis</span>
+                                </div>
+                                <input type="text" asp-for="Description" class="form-control" aria-describedby="label1" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        @if (ViewBag.Type == 2)
+                        {
+                            <div class="table-responsive col-lg-6 offset-lg-6">
+                                <table class="table table-hover">
+                                    <thead class="table-secondary">
+                                        <tr>
+                                            <td>
+                                                <a class="pl-3 font-weight-bold">Specjalizacje</a>
+                                                <a class="btn btn-primary btn-sm float-right" asp-controller="MedicalSpecializations" asp-action="AddUserMedSpec" asp-route-id="@ViewBag.IdUser"><i class="fas fa-plus-circle"></i> Dodaj</a>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in ViewBag.MedicalSpecializations)
+                                        {
+                                            if (item.IsActive == true)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <a class="pl-3"> @item.Specialization.Name</a>
+                                                        <a class="btn btn-outline-primary float-right mr-3 btn-sm" asp-controller="MedicalSpecializations" asp-action="DeleteUserMedSpec" asp-route-id="@item.MedicalSpecializationID"><i class="fas fa-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @await Component.InvokeAsync("DetailsComponent", new
+               {
+                   AddedDate = @Model.AddedDate,
+                   UpdatedDate = @Model.UpdatedDate,
+                   AddedUserID = 0,
+                   UpdatedUserID = 0
+
+               })
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col" style="padding-left: 0px;">
+            @if (Model.IsActive)
+            {
+                <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-outline-danger buttMargin" data-toggle="modal" data-target="#myModal">
+                    Usuń
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h4 class="modal-title">Uwaga!</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                Czy chcesz usunąć użytkownika?
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <form asp-action="Delete" asp-route-id="@Model.UserID">
+                                    <input type="hidden" asp-for="UserID" />
+                                    <input type="submit" value="@ViewBag.Delete" class="btn btn-outline-danger buttMargin" />
+                                    <button type="button" class="btn btn-outline-secondary buttMargin" data-dismiss="modal">Nie</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<form asp-action="Delete" asp-route-id="@Model.UserID" onsubmit="alert('Na pewno chcesz usunąć użytkownika?')">
+                <input type="hidden" asp-for="UserID" />
+                <input type="submit" value="@ViewBag.Delete" class="btn btn-outline-danger buttMargin" />
+            </form>*@
+            }
+            else
+            {
+                <form asp-action="Restore" asp-route-id="@Model.UserID">
+                    <input type="hidden" asp-for="UserID" />
+                    <input type="submit" value="@ViewBag.Restore" class="btn btn-outline-success buttMargin" />
+                </form>
+            }
+        </div>
+        <div>
+            <input form="saveForm" type="submit" value="Zapisz" class="btn btn-success float-right buttMargin" />
+        </div>
+    </div>
+
+</div>
+
+
+<script> 
+    function randomPassword(length) {
+    var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#$%^&*()_-+=[{]};:<>|./?";
+    var pass = "";
+    for (var x = 0; x < length; x++) {
+        var i = Math.floor(Math.random() * chars.length);
+        pass += chars.charAt(i);
+    }
+    return pass;
+}
+
+function generatePassword() {
+    document.getElementById("passwordInput").value = randomPassword(myForm.length.value);
+}
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#passPop').popover();
+    })
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#files").change(function () {
+
+            var previewimages = $("#showimage");
+            previewimages.html("");
+            $($(this)[0].files).each(function () {
+                var file = $(this);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = $("<img />");
+                    img.attr("style", "height:150px;width: 150px;");
+                    img.attr("src", e.target.result);
+                    previewimages.append(img);
+                }
+                reader.readAsDataURL(file[0]);
+            });
+
+        });
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

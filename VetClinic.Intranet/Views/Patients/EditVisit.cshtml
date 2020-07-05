@@ -1,0 +1,147 @@
+@model VetClinic.Data.Helpers.VisitDetails
+
+@{
+    Layout = null;
+}
+
+<form asp-action="EditVisit" enctype="multipart/form-data">
+    <div class="form-row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Visit.VisitID" />
+        <input type="hidden" asp-for="Visit.IsActive" />
+        <input type="hidden" asp-for="Visit.AddedDate" />
+        <input type="hidden" asp-for="Visit.UpdatedDate" />
+        <input type="hidden" asp-for="Visit.AddedUserID" />
+        <input type="hidden" asp-for="Visit.UpdatedUserID" />
+        <input type="hidden" asp-for="Visit.DateOfVisit" />
+
+        <div class="form-group col-md-6">
+            <div class="input-group ">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="label1">Zabieg</span>
+                </div>
+                <select type="select" asp-for="Treatment.TreatmentID" class="form-control" aria-describedby="label1" asp-items="ViewBag.TreatmentID">
+                    <option disabled selected>--- Wybierz ---</option>
+                </select>
+                <span asp-validation-for="Treatment.TreatmentID" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="label1">Lek</span>
+                </div>
+                <select type="select" asp-for="Medicine.MedicineID" class="form-control" aria-describedby="label1" asp-items="ViewBag.MedicineID">
+                    <option disabled selected>--- Wybierz ---</option>
+                </select>
+                <span asp-validation-for="Medicine.MedicineID" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <p>
+                <a class="btn btn-primary" data-toggle="collapse" href="#Leki" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Dodane Leki
+                </a>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#Zabiegi" aria-expanded="false" aria-controls="collapseExample">
+                    Dodane Zabiegi
+                </button>
+            </p>
+            <div class="collapse col-sm-6 wiersz" id="Leki">
+                <div class="card card-body">
+                    @if (Model.VisitMedicine.Count == 0)
+                    {
+                        <b>Nie ma dodanych leków</b>
+                    }
+                    else
+                    {
+                        <b>Leki</b>
+                    }
+                    <ul>
+                        @foreach (var item in Model.VisitMedicine)
+                        {
+
+                            <li>@Html.DisplayFor(modelItem => item.Medicine.Name)</li>
+
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="collapse col-sm-6 wiersz" id="Zabiegi">
+                <div class="card card-body">
+                    @if (Model.VisitTreatments.Count == 0)
+                    {
+                        <b>Nie ma dodanych zabiegów</b>
+                    }
+                    else
+                    {
+                        <b>Zabiegi</b>
+                    }
+                    <ul>
+                        @foreach (var item in Model.VisitTreatments)
+                        {
+
+                            <li>@Html.DisplayFor(modelItem => item.Treatment.Name)</li>
+
+                        }
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <div class="form-row">
+        @*<div class="row inputGroupMargin col-12">*@
+        <div class="form-group col-12">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Opis</span>
+                </div>
+                <textarea asp-for="Visit.Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Visit.Description" class="text-danger"></span>
+            </div>
+        </div>
+        @*</div>*@
+    </div>
+    <div>
+        @{
+            var parms = new Dictionary<string, string>
+            {
+                { "speakerId", "13" },
+                { "currentYear", "34" }
+            };
+        }
+        <input type="submit" value="Zapisz zmiany" class="btn btn-success float-right buttMargin"
+               asp-action="EditVisit" asp-route-id="@Model.Visit.VisitID" asp-fragment="@Model.Visit.VisitID"/>
+    </div>
+</form>
+
+@if (Model.Visit.IsActive)
+{
+    <form asp-action="DeleteVisit" asp-route-id="@Model.Visit.VisitID" onsubmit="alert('Na pewno chcesz usunąć wizytę?')">
+        <input type="hidden" asp-for="@Model.Visit.VisitID" />
+        <input type="submit" value="Usuń" class="btn btn-outline-danger buttMargin" />
+    </form>
+} 
+else
+{
+<form asp-action="RestoreVisit" asp-route-id="@Model.Visit.VisitID">
+    <input type="hidden" asp-for="@Model.Visit.VisitID" />
+    <input type="submit" value="Przywróć" class="btn btn-outline-success buttMargin" />
+</form>
+}
+
+<script type="text/javascript">
+
+    function ExpandCollapse() {
+        var collPanel = $find("CollapsiblePanelExtender1");
+        if (collPanel.get_Collapsed())
+            collPanel.set_Collapsed(false);
+        else
+            collPanel.set_Collapsed(true);
+    }
+
+</script>
