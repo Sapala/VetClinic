@@ -5,3 +5,10 @@ Aby uruchomić projekt lokalnie należy:
     Dzięki temu skryptowi baza danych uzyska właściwą strukturę i zostanie zapełniona danymi testowymi 
 3) W projekcie VetClinic.Intranet i w projekcie VetClinic.PortalWWW w pliku appsettings.json należy zmienić connection string (zmienić nazwę serwera).
 4) Poprzez konsole menadzera pakietów zaaktualizować baze danych poleceniem update-database
+
+projekt vetclini.intranet:
+    Login: Admin 
+    Hasło: admin
+projekt VetClinic.PortalWWW
+    Login: Client
+    Hasło: 6f73b8f0f588f5d42eedfdbe5e98902b
